@@ -1,37 +1,40 @@
-#!/bin/bash 
+#!/bin/bash
 
-#check if K1 & K2 are passed as args
+#check if K1 & K2 are passed as arguments
 if [ $# -ne 2 ]; then 
-    echo "ERROR: Pass K1 & K2 as args!"
+    echo "ERROR: Pass Both K1 & K2 as arguments!"
     exit 1
 fi
 
 K1="$1"
 K2="$2"
 
-#check if K1 & K2 are directories 
+#check if both K1 & K2 are dictionaries 
 if [ ! -d "$K1" ]; then 
-    error "ERROR: K1 is not a directory"
+    echo "ERROR: K1 is not a directory!"
     exit 1
-fi
+fi 
 
 if [ ! -d "$K2" ]; then 
-    error "ERROR: K2 is not a directory"
+    echo "ERROR: K2 is not a directory!"
     exit 1
-fi
+fi 
 
-#list all elements before action 
-echo "$K1 list of elements"
+#list of contents 
+echo "------Before mv"
+echo "$K1 directory:"
 ls -lh "$K1"
-echo "$K2 list of elements"
+echo "$K2 directory:"
 ls -lh "$K2"
 
-#move command
-#add readable on linux (on mac doesn't work)
-find "$K1" -maxdepth 1 -type f -exec mv -nv {} "$K2"/ \;
+for f in "$K1"/*; do 
+    if [ -f "$f" ] && [ -w "$f" ]; then 
+        mv -nv "$f" "$K2"
+    fi 
+done 
 
-#list all elements after action 
-echo "$K1 list of elements"
+echo "------After mv"
+echo "$K1 directory:"
 ls -lh "$K1"
-echo "$K2 list of elements"
+echo "$K2 directory:"
 ls -lh "$K2"

@@ -1,21 +1,31 @@
 #!/bin/bash
 
-#Check If K is passed as an arg
-if [ -z "$1" ]; then
+#check if K is passed as an Argument 
+if [ $# -ne 1 ]; then 
     echo "ERROR: Pass K as an argument!"
     exit 1
-fi
+fi 
 
 K="$1"
 
-#Check if K is a directory
-if [ ! -d "$K" ]; then
-    echo "ERROR: K is not a directory"
+#check if K is a directory 
+if [ ! -d "$K" ]; then 
+    echo "ERROR: K is not a directory!"
     exit 1
-fi
+fi 
 
-empty_files_num=$(find "$K" -maxdepth 1 -type f -size 0c | wc -l)
-dir_num=$(find "$K" -maxdepth 1 -type d -perm -u+x | wc -l)
+num_of_empty_files=0
+num_of_dirs=0
 
-echo "Number of empty files $empty_files_num"
-echo "Number of directories $dir_num"
+for f in "$K"/*; do 
+    if [ -f "$f" ] && [ ! -s "$f" ]; then
+        ((num_of_empty_files++))
+    fi 
+
+    if [ -d "$f" ] && [ -x "$f" ]; then 
+        ((num_of_dirs++))
+    fi 
+done 
+
+echo "Number of empty files in $K: $num_of_empty_files"
+echo "Number of a dirs in $K, that we have access to: $num_of_dirs"

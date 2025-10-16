@@ -1,29 +1,30 @@
 #!/bin/bash 
 
-#Check If K % P are passed as args
+#check if both K & P are passed 
 if [ $# -ne 2 ]; then 
-    echo "ERROR: Pass K & P as args!"
+    echo "ERROR: Pass both K & P args!"
     exit 1
-fi
+fi 
 
 K="$1"
 P="$2"
 
-#Check If K is a directory, P is a file 
-if [ ! -d "$K" ]; then
+#check if K is a directory & P is a file 
+if [ ! -d "$K" ]; then 
     echo "ERROR: K is not a directory!"
     exit 1
-fi
+fi 
 
 if [ ! -f "$P" ]; then 
-    echo "ERROR: P is not a file"
+    echo "ERROR: P is not a file!"
     exit 1
-fi
+fi 
 
 for f in "$K"/*; do 
-    if [ -s "$f" ] && [ ! -x "$f" ]; then
+    if [ ! -s "$f" ] && [ ! -x "$f" ]; then 
+        echo "$f"
         name=$(basename "$f")
-        echo "$name" >> "$P"
+        echo "$name" >> $P
         rm "$f"
-    fi 
-done 
+    fi
+done
